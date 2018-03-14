@@ -2,11 +2,16 @@
 
 FROM centos:centos7
 LABEL author="marcos.roberto@defensoria.ce.def.br"
-ENV AMBIENTE="development"
-ENV APPNAME="app1"
-ENV ROOT_DOMAIN = "defensoria.ce.def.br"
-ENV DOMAIN ${AMBIENTE}.${APPNAME}.${ROOT_DOMAIN}
+ENV AMBIENTE "development"
+ENV APPNAME "sge.dev"
+ENV ROOT_DOMAIN "defensoria.ce.def.br"
+ENV DOMAIN "${APPNAME}.${ROOT_DOMAIN}"
 ENV PORT 8080
+ENV GIT_REPO "https://marcosroberto1808:Fh&jvchv1808@github.com/dpgeceti/sistema-gerenciamanto-estagiario.git /${DOMAIN}/code/sge_test"
+
+RUN echo ${DOMAIN}
+RUN echo ${GIT_REPO}
+
 
 # upgrade...
 RUN yum upgrade -y

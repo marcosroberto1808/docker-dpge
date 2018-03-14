@@ -14,9 +14,19 @@ To create the image `docker-django-nginx-uwsgi-centos7/django`, execute the foll
 To run the image and bind to port 8080:
 
         docker run -d -p 8080:8080 docker-django-nginx-uwsgi-centos7/django
+        or
+        docker run -d -p 8080:8080 --name=APP_ALIAS IMAGE_NAME 
 
 To check the logs of the container run the below command:
 
-        docker logs <CONTAINER_ID>
+        uWSGI logs:
+        docker logs <CONTAINER_ID> or ALIAS
+
+        nginx logs:
+        docker exec -it APP_ALIAS tail -f /var/log/nginx/error.log
+        docker exec -it APP_ALIAS tail -f /var/log/nginx/access.log
 
 
+To log in the container shell run the below command:
+
+        docker exec -it APP_ALIAS bash
