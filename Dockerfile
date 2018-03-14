@@ -3,7 +3,7 @@
 FROM centos:centos7
 LABEL author="marcos.roberto@defensoria.ce.def.br"
 ENV AMBIENTE="development"
-ENV APPNAME="testeapp1"
+ENV APPNAME="app1"
 ENV ROOT_DOMAIN = "defensoria.ce.def.br"
 ENV DOMAIN ${AMBIENTE}.${APPNAME}.${ROOT_DOMAIN}
 ENV PORT 8080
