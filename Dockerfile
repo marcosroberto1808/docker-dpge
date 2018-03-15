@@ -3,7 +3,7 @@
 FROM centos:centos7
 LABEL author="marcos.roberto@defensoria.ce.def.br"
 ENV AMBIENTE "development"
-ENV APPNAME "sge.dev"
+ENV APPNAME "app1.devel"
 ENV ROOT_DOMAIN "defensoria.ce.def.br"
 ENV DOMAIN "${APPNAME}.${ROOT_DOMAIN}"
 ENV PORT 8080
@@ -16,12 +16,23 @@ RUN echo ${GIT_REPO}
 RUN yum upgrade -y
 # add EPEL repo
 
-RUN yum -y install epel-release && yum clean all
-RUN yum -y install python-pip python-setuptools && yum clean all
-RUN yum install -y python34 python34-devel python-devel python-pip nginx sqlite3 gcc unzip wget git
-RUN pip install --upgrade pip setuptools
+#Acesso SSH
+ENV SSH_USER defensoria
+ENV SSH_PASS dpgeceti
+RUN yum -y update; yum clean all
+RUN yum -y install epel-release openssh-server passwd; yum clean all
+ADD ./start.sh /start.sh
+RUN mkdir /var/run/sshd
+RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' 
+RUN ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N '' 
+RUN ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N '' 
+RUN chmod 755 /start.sh
+RUN ./start.sh
 
-# install uwsgi 
+#Dependencias PYTHON 3.4
+RUN yum -y install python-pip python-setuptools; yum clean all
+RUN yum -y install python34 python34-devel python-devel python-pip nginx sqlite3 gcc unzip wget git
+RUN pip install --upgrade pip setuptools
 RUN pip install uwsgi
 
 # add files
@@ -49,10 +60,6 @@ ADD setup.sh /setup.sh
 RUN chmod 775 /*.sh
 
 RUN /setup.sh
-
-#EXPOSE 8080
-# Since docker 1.3.0 we can use variables "anywhere". See #6054.
-EXPOSE ${PORT}
-
+#ENTRYPOINT ["/usr/sbin/sshd", "-D"]
 CMD ["/run.sh"]
 

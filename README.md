@@ -10,12 +10,15 @@ Usage
 To create the image `docker-django-nginx-uwsgi-centos7/django`, execute the following command on the docker-django-nginx-uwsgi-centos7 folder:
 
         docker build -t docker-django-nginx-uwsgi-centos7/django .
+        or
+        docker build -t foo:tag .
 
 To run the image and bind to port 8080:
 
         docker run -d -p 8080:8080 docker-django-nginx-uwsgi-centos7/django
         or
         docker run -d -p 8080:8080 --name=APP_ALIAS IMAGE_NAME 
+        docker run -d -p 8080:8080 -p 422:22 --name=APP_ALIAS IMAGE_NAME  
 
 To check the logs of the container run the below command:
 
@@ -30,3 +33,12 @@ To check the logs of the container run the below command:
 To log in the container shell run the below command:
 
         docker exec -it APP_ALIAS bash
+
+
+Apagar containers:
+
+        containers parados:
+        docker rm @(docker ps -aq)
+
+        todas as imagems:
+        docker rmi @(docker images -aq)

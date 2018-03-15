@@ -2,7 +2,10 @@
 
 # run uwsgi in background
 DOMAIN=`cat /.django` 
-uwsgi --ini /${DOMAIN}/cfg/django.ini --uid 1000 --gid 1000 &
+uwsgi --ini /${DOMAIN}/cfg/django.ini --uid 1000 --gid 1000 & 
 
 # start nginx
-exec nginx
+exec nginx & 
+
+# start sshd
+/usr/sbin/sshd -D

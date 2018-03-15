@@ -15,8 +15,6 @@ mkdir /${DOMAIN}/run/
 chown djangouser:nginx /${DOMAIN}/run/
 chmod 775 /${DOMAIN}/run/
 
-# git clone project
-exec env ${GIT_REPO}
 # start first django project
 su - djangouser -c "cd /${DOMAIN}/code/ && django-admin.py startproject ${HOST} . && python manage.py migrate"
 # set perms
