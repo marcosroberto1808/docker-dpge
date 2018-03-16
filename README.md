@@ -42,3 +42,14 @@ Apagar containers:
 
         todas as imagems:
         docker rmi @(docker images -aq)
+
+Comandos rápidos:
+
+docker build -t centos7-dpge .
+docker run -d -p 8080:8080 -p 422:22 --name=app-teste centos7-dpge
+
+docker rm @(docker ps -aq) ; docker rmi @(docker images -aq)
+docker ps -a ; docker images
+docker stop app-teste ; docker rm app-teste ; docker build -t centos7-dpge . ; docker run -d -p 8080:8080 -p 422:22 --name=app-teste centos7-dpge ; docker ps
+
+docker exec -it app-teste bash
