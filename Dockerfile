@@ -9,9 +9,8 @@ ENV ROOT_DOMAIN "defensoria.ce.def.br"
 ENV DOMAIN "${APPNAME}.${ROOT_DOMAIN}"
 ENV PORT 8080
 ENV GIT_REPO "https://github.com/dpgeceti/sistema-gerenciamanto-estagiario.git"
-ENV GIT_USERNAME marcosroberto1808
-ENV GIT_PASSWORD Fh&jvchv1808
-
+ENV GIT_USERNAME "<git user>"
+ENV GIT_PASSWORD "<git password>"
 RUN echo ${DOMAIN}
 RUN echo ${GIT_REPO}
 
