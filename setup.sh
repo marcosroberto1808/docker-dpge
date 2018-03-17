@@ -25,12 +25,6 @@ mkdir /${DOMAIN}/run/
 chown ${SSH_USER}:nginx /${DOMAIN}/run/
 chmod 775 /${DOMAIN}/run/
 
-# start first django project
-su - ${SSH_USER} -c "cd /${DOMAIN}/code/ && django-admin.py startproject ${HOST} . && python manage.py migrate"
-# set perms
-chown -R ${SSH_USER}:nginx /${DOMAIN}/code/${HOST}/
-chmod +x /${DOMAIN}/code/
-
 echo "Your project's code is located in: /${DOMAIN}/code/${HOST}/" 
 
 # save used domainname 
@@ -47,17 +41,27 @@ echo -e "$SSH_USERPASS\n$SSH_USERPASS" | (passwd --stdin ${USER})
 echo ssh ${USER} password: $SSH_USERPASS
 }
 
-## GIT REPO CLONE
-
-
+## GIT REPOSITORIO CLONE
 __git_clone() {
-repo=`echo ${GIT_REPO}`
-pasta=`echo ${APPNAME}`
+REPO_PATH=`echo ${DOMAIN} | cut -f1 -d '.'`
 su - ${SSH_USER} -c "cd /${DOMAIN}/code/ && git config --global credential.helper store"
-su - ${SSH_USER} -c "cd /${DOMAIN}/code/ && git clone ${repo} ${pasta}"
+su - ${SSH_USER} -c "cd /${DOMAIN}/code/ && git clone ${GIT_REPO} ${REPO_PATH}"
+mv /${DOMAIN}/cfg/.env /${DOMAIN}/code/${HOST}/
+unzip /${DOMAIN}/cfg/static.zip -d /${DOMAIN}/code/${HOST}/app/
+chown -R ${SSH_USER}:nginx /${DOMAIN}/code/${HOST}/
+
+chmod +x /${DOMAIN}/code/
 }
 
-## Call all functions
+## Instalar requirementes.txt
+__install_requirements() {
+HOST=`echo ${DOMAIN} | cut -f1 -d '.'`
+source /AppEnv/bin/activate ; pip install -r /${DOMAIN}/code/${HOST}/require*.txt
+
+}
+
+## Chamar Funcoes
 __setup_app
 __create_user
 __git_clone
+__install_requirements
