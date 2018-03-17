@@ -1,8 +1,7 @@
 Docker para aplicações python3.4 com imagem django-nginx-uwsgi-centos7
 =================================
 
-Arquivo dockerfile com alguns shellscripts para rodar uma app Django , combinado com Nginx, uWsgi usando um Centos 7.x container.
-
+Arquivo dockerfile com alguns shellscripts para rodar uma app Django , combinados com Nginx, uWsgi e usando um Centos 7.x container.
 
 Uso
 -----
@@ -39,7 +38,6 @@ Verificar os logs da aplicacao:
 Acessar o terminal do container diretamente com o comando abaixo:
 
         docker exec -it APP_ALIAS bash
-
 
 Apagar containers:
 
