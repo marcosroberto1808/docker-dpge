@@ -44,8 +44,9 @@ echo ssh ${USER} password: $SSH_USERPASS
 ## GIT REPOSITORIO CLONE
 __git_clone() {
 REPO_PATH=`echo ${DOMAIN} | cut -f1 -d '.'`
+echo "Executando git clone do projeto $REPO_PATH" 
 su - ${SSH_USER} -c "cd /${DOMAIN}/code/ && git config --global credential.helper store"
-su - ${SSH_USER} -c "cd /${DOMAIN}/code/ && git clone ${GIT_REPO} ${REPO_PATH}"
+su - ${SSH_USER} -c "cd /${DOMAIN}/code/ && git clone ${GIT_REPO} ${REPO_PATH} -b ${GIT_BRANCH}"
 mv /${DOMAIN}/cfg/.env /${DOMAIN}/code/${HOST}/
 unzip /${DOMAIN}/cfg/static.zip -d /${DOMAIN}/code/${HOST}/app/
 chown -R ${SSH_USER}:nginx /${DOMAIN}/code/${HOST}/
@@ -56,6 +57,7 @@ chmod +x /${DOMAIN}/code/
 ## Instalar requirementes.txt
 __install_requirements() {
 HOST=`echo ${DOMAIN} | cut -f1 -d '.'`
+echo "Executando a instalacao: pip install requirements.txt" 
 source /AppEnv/bin/activate ; pip install -r /${DOMAIN}/code/${HOST}/require*.txt
 
 }

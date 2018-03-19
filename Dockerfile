@@ -3,16 +3,21 @@
 # Variaveis de ambiente
 FROM centos:centos7
 LABEL author="marcos.roberto@defensoria.ce.def.br"
+ENV TZ=America/Fortaleza
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV AMBIENTE "development"
 ENV APPNAME "sge.devel"
+ENV DB_HOST "192.168.10.254"
+ENV DB_USER "postgres"
+ENV DB_PASS "postgres"
 ENV ROOT_DOMAIN "defensoria.ce.def.br"
 ENV DOMAIN "${APPNAME}.${ROOT_DOMAIN}"
 ENV PORT 8080
 ENV GIT_REPO "https://github.com/dpgeceti/sistema-gerenciamanto-estagiario.git"
 ENV GIT_USERNAME "<git user>"
 ENV GIT_PASSWORD "<git password>"
+ENV GIT_BRANCH "master"
 RUN echo ${DOMAIN}
-RUN echo ${GIT_REPO}
 
 # Acesso SSH
 ENV SSH_USER defensoria
