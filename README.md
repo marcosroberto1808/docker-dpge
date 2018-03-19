@@ -6,21 +6,21 @@ Arquivo dockerfile com alguns shellscripts para rodar uma app Django , combinado
 Uso
 -----
 
-Para criar a imagem `centos7-dpge`, execute o comando a seguir na pasta do projeto:
+Para criar a imagem `centos7-dpge-python3`, execute o comando a seguir na pasta do projeto:
 
-        docker build -t centos7-dpge .
+        docker build -t centos7-dpge-python3 .
 
         ou com a tag da versao:
 
-        docker build -t centos7-dpge:latest .
+        docker build -t centos7-dpge-python3:latest .
 
 Para carregar a imagem e associar a portas externas:
 
-        docker run -d -p 8080:8080 --name=APP_ALIAS centos7-dpge
+        docker run -d -p 8080:8080 --name=APP_ALIAS centos7-dpge-python3
         
         ou com múltiplas portas:
 
-        docker run -d -p 8080:8080 -p 422:22 --name=APP_ALIAS centos7-dpge  
+        docker run -h APP_ALIAS -d -p 8080:8080 -p 422:22 --name=APP_ALIAS centos7-dpge-python3  
 
 Verificar os logs da aplicacao:
 
@@ -49,8 +49,8 @@ Apagar containers:
 
 Comandos mais usados:
 
-        docker build -t centos7-dpge .
-        docker run -d -p 8080:8080 -p 422:22 --name=APP_ALIAS centos7-dpge
+        docker build -t centos7-dpge-python3 .
+        docker run -d -p 8080:8080 -p 422:22 --name=APP_ALIAS centos7-dpge-python3
 
         Apagar os containers parados e todas as imagems:
         
@@ -62,5 +62,5 @@ Comandos mais usados:
 
         Parar o container APP_ALIAS e depois apagar, rebuild da imagem e iniciar novamente o container APP_ALIAS :
         
-        docker stop APP_ALIAS ; docker rm APP_ALIAS ; docker build -t centos7-dpge . ; docker run -d -p 8080:8080 -p 422:22 --name=APP_ALIAS centos7-dpge
+        docker stop APP_ALIAS ; docker rm APP_ALIAS ; docker build -t centos7-dpge-python3 . ; docker run -h APP_ALIAS -d -p 8080:8080 -p 422:22 --name=APP_ALIAS centos7-dpge-python3
 
