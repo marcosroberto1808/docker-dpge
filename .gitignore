@@ -4,5 +4,5 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-# Ignore .env
+# Ignorar .env - criar este arquivo localmente no mesmo diretório, com base em exemplo.
 /arquivos/.env

@@ -6,16 +6,17 @@ LABEL author="marcos.roberto@defensoria.ce.def.br"
 ENV TZ=America/Fortaleza
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV AMBIENTE "development"
-ENV APPNAME "sge.devel"
-ENV DB_HOST "192.168.10.254"
-ENV DB_USER "postgres"
-ENV DB_PASS "postgres"
-ENV ROOT_DOMAIN "defensoria.ce.def.br"
+ENV APPNAME "app_alias.devel"
+ENV DB_HOST "192.168.xx.xx"
+ENV DB_USER "db_user"
+ENV DB_PASS "db_pass"
+ENV ROOT_DOMAIN "dominio.com.br"
 ENV DOMAIN "${APPNAME}.${ROOT_DOMAIN}"
 ENV PORT 8080
-ENV GIT_REPO "https://github.com/dpgeceti/sistema-gerenciamanto-estagiario.git"
-ENV GIT_USERNAME "<git user>"
-ENV GIT_PASSWORD "<git password>"
+# Variaveis para GitHub
+ENV GIT_REPO "https://github.com/git_repositorio.git"
+ENV GIT_USERNAME "git_user"
+ENV GIT_PASSWORD "git_pass"
 ENV GIT_BRANCH "master"
 RUN echo ${DOMAIN}
 
@@ -23,7 +24,7 @@ RUN echo ${DOMAIN}
 ENV SSH_USER defensoria
 ENV SSH_PASS dpgeceti
 RUN yum -y update; yum clean all
-RUN yum -y install epel-release openssh-server passwd
+RUN yum -y install epel-release openssh-server passwd sudo
 RUN mkdir /var/run/sshd
 RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' 
 RUN ssh-keygen -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -N '' 
@@ -50,10 +51,13 @@ COPY ./arquivos/static.zip /${DOMAIN}/cfg/
 # define mountable dirs
 VOLUME ["/var/log/nginx"]
 
-# Add Usuario SSH e arquivos para autenticacao do GIT
+# Add Usuario SSH , permissões de SUDO e arquivos para autenticacao do GIT
 RUN adduser --home=/${DOMAIN}/code -u 1000 ${SSH_USER}
+RUN echo -e "$SSH_PASS\n$SSH_PASS" | (passwd --stdin ${SSH_USER})
 COPY ./arquivos/.git-credentials /${DOMAIN}/code/
 RUN chown ${SSH_USER}:${SSH_USER} /${DOMAIN}/code/.git-credentials
+RUN echo "${SSH_USER} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/${SSH_USER} && \
+chmod 0440 /etc/sudoers.d/${SSH_USER}
 
 # Arquivos de configuracao diversos
 RUN ln -s /${DOMAIN}/cfg/django.params /etc/nginx/conf.d/
@@ -73,4 +77,3 @@ RUN /setup.sh
 
 ## Iniciar Tudo
 CMD ["/run.sh"]
-

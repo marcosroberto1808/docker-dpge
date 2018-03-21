@@ -4,11 +4,11 @@
 __setup_app() {
 
 if [ -z ${DOMAIN} ]; then
-    echo "Error - empty domain name!"
+    echo "Error - Nome de domínio vazio!"
     exit 1
 fi
 
-#Converter senha com caracteres especiais
+# Converter senha com caracteres especiais
 GIT_PASS_CONVERT=$(perl -e 'print quotemeta shift(@ARGV)' "${GIT_PASSWORD}")
 
 HOST=`echo ${DOMAIN} | cut -f1 -d '.'`
@@ -20,28 +20,18 @@ sed -i "s/SSH_USER/${SSH_USER}/g" /${DOMAIN}/cfg/*
 sed -i "s/GIT_USERNAME/${GIT_USERNAME}/g" /${DOMAIN}/code/.git-credentials
 sed -i "s/GIT_PASSWORD/${GIT_PASS_CONVERT}/g" /${DOMAIN}/code/.git-credentials
 
-# setup place for our uwsgi socket
+# Configurar local para o uwsgi socket
 mkdir /${DOMAIN}/run/
 chown ${SSH_USER}:nginx /${DOMAIN}/run/
 chmod 775 /${DOMAIN}/run/
 
-echo "Your project's code is located in: /${DOMAIN}/code/${HOST}/" 
+echo "O código do projeto está em: /${DOMAIN}/code/${HOST}/" 
 
-# save used domainname 
+# Salvar nome de domínio usado 
 echo "${DOMAIN}" > /.django
 }
 
-## SSH CONFIG
-__create_user() {
-# Create a user to SSH into as.
-USER=`echo ${SSH_USER}`
-SSH_USERPASS=`echo ${SSH_PASS}`
-#useradd -u 1001 ${USER} 
-echo -e "$SSH_USERPASS\n$SSH_USERPASS" | (passwd --stdin ${USER})
-echo ssh ${USER} password: $SSH_USERPASS
-}
-
-## GIT REPOSITORIO CLONE
+# Clonar repositório do GitHub
 __git_clone() {
 REPO_PATH=`echo ${DOMAIN} | cut -f1 -d '.'`
 echo "Executando git clone do projeto $REPO_PATH" 
@@ -50,20 +40,17 @@ su - ${SSH_USER} -c "cd /${DOMAIN}/code/ && git clone ${GIT_REPO} ${REPO_PATH} -
 mv /${DOMAIN}/cfg/.env /${DOMAIN}/code/${HOST}/
 unzip /${DOMAIN}/cfg/static.zip -d /${DOMAIN}/code/${HOST}/app/
 chown -R ${SSH_USER}:nginx /${DOMAIN}/code/${HOST}/
-
 chmod +x /${DOMAIN}/code/
 }
 
-## Instalar requirementes.txt
+# Instalar requirementes.txt
 __install_requirements() {
 HOST=`echo ${DOMAIN} | cut -f1 -d '.'`
 echo "Executando a instalacao: pip install requirements.txt" 
 source /AppEnv/bin/activate ; pip install -r /${DOMAIN}/code/${HOST}/require*.txt
-
 }
 
 ## Chamar Funcoes
 __setup_app
-__create_user
 __git_clone
 __install_requirements
